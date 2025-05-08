@@ -214,6 +214,12 @@ public class AddTransactionActivity extends AppCompatActivity {
             return false;
         }
 
+        // Validate transaction type selection
+        if (transactionTypeRadioGroup.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please select transaction type", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         // Validate category
         String category = categoryEditText.getText().toString()
                 .trim();

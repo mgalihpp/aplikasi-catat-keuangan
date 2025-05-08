@@ -17,6 +17,7 @@ import com.example.financemanager.adapters.AccountAdapter;
 import com.example.financemanager.models.Account;
 
 import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
 
 /**
@@ -104,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadAccounts() {
         accountList = dbHelper.getAllAccounts();
+
+        if(accountList.isEmpty()){
+            currencyFormat.setCurrency(Currency.getInstance("IDR"));
+
+        } else {
+            currencyFormat.setCurrency(Currency.getInstance(accountList.get(0).getCurrency()));
+        }
 
         if (accountList.isEmpty()) {
             // Show a message if no accounts exist

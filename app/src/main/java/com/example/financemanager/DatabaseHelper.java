@@ -550,6 +550,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Get income by category
+     * @return List of category and amount pairs
+     */
+    public List<CategorySummary> getIncomeByCategory() {
+        List<CategorySummary> categoryIncomes = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + TRANSACTION_CATEGORY + ", SUM(" + TRANSACTION_AMOUNT + ") as total FROM " + TABLE_TRANSACTIONS +
+                " WHERE " + TRANSACTION_TYPE + " = 'INCOME' GROUP BY " + TRANSACTION_CATEGORY +
+                " ORDER BY total DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String category = cursor.getString(cursor.getColumnIndex(TRANSACTION_CATEGORY));
+                double amount = cursor.getDouble(cursor.getColumnIndex("total"));
+                categoryIncomes.add(new CategorySummary(category, amount));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return categoryIncomes;
+    }
+
+    /**
      * Inner class for category summary
      */
     public static class CategorySummary {
